@@ -8,9 +8,13 @@ class JiraController extends CI_Controller {
 		parent::__construct();
 	}
 
-	public function index(){
+	public function index()
+	{
 //		createJiraIssue("LT","test 3","Bug","Test 1234597810");
-//		echo getIssue('LT-5');
+//		echo getIssue('LT-1');
 //		deleteIssues('LT-5');
+//		createLogwork('LT-1','5h 30m');
+//		getLogwork('LT-1');
 	}
+
 }

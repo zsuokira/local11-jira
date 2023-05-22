@@ -2,14 +2,10 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 require 'vendor/autoload.php';
 use JiraRestApi\Issue\IssueService;
-use JiraRestApi\Configuration\ArrayConfiguration;
-use JiraRestApi\Field\Field;
-use JiraRestApi\Field\FieldService;
-use JiraRestApi\JiraException;
 use JiraRestApi\Issue\IssueField;
-use JiraRestApi\Project\ProjectService;
 use JiraRestApi\Issue\Worklog;
-
+use JiraRestApi\Issue\Transition;
+use JiraRestApi\Issue\Comment;
 // lấy ra 1 issue
 if ( ! function_exists('getIssue'))
 {
@@ -97,4 +93,83 @@ if (!function_exists('getLogwork')) {
 		var_dump($worklogs);
 	}
 }
+// set transition
+if (!function_exists('setTransition')) {
+	function setTransition($issueKey,$name,$comment)
+	{
+		$transition = new Transition();
+		$transition->setTransitionName($name);
+		$transition->setCommentBody($comment);
+		$issueService = new IssueService();
+		$issueService->transition($issueKey, $transition);
+		echo "Success!";
+	}
+}
 
+// add Comment
+if (!function_exists('addComment')) {
+	function addComment($issueKey,$commentValue)
+	{
+		$comment = new Comment();
+		$body = $commentValue;
+		$comment->setBody($body);
+		$issueService = new IssueService();
+		$ret = $issueService->addComment($issueKey, $comment);
+		echo "Add comment success";
+	}
+}
+//get comment
+if (!function_exists('getComment')) {
+	function getComment($issueKey)
+	{
+		$issueService = new IssueService();
+
+		$param = [
+			'startAt' => 0,
+			'maxResults' => 3,
+			'expand' => 'renderedBody',
+		];
+		$comments = $issueService->getComments($issueKey, $param);
+		print_r($comments);
+	}
+}
+// get comment by id
+if (!function_exists('getCommentByID')) {
+	function getCommentByID($issueKey,$id)
+	{
+
+		$issueService = new IssueService();
+
+		$param = [
+			'startAt' => 0,
+			'maxResults' => 3,
+			'expand' => 'renderedBody',
+		];
+		$commentId = $id;
+
+		$comments = $issueService->getComment($issueKey, $commentId, $param);
+
+		print_r($comments);
+
+	}
+}
+//delete comment
+if (!function_exists('delComment')) {
+	function delComment($issueKey,$id)
+	{
+		$issueService = new IssueService();
+		$ret = $issueService->deleteComment($issueKey, $id);
+		echo "Delete success!";
+	}
+}
+// Update comment
+if (!function_exists('updateComment')) {
+	function updateComment($issueKey,$id,$body)
+	{
+		$issueService = new IssueService();
+		$comment = new Comment();
+		$comment->setBody($body);
+		$issueService->updateComment($issueKey, $id, $comment);
+		echo "Update comment success!";
+	}
+}

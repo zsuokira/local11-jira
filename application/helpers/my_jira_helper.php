@@ -300,3 +300,12 @@ if (!function_exists('getUserInfo')) {
 		var_dump($user);
 	}
 }
+
+if (!function_exists('getUserInfo')) {
+	function getUserInfo($accountId)
+	{
+		$us = new UserService();
+		$user = $us->get(['accountId' => $accountId]);
+		var_dump($user);
+	}
+}

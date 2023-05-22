@@ -20,7 +20,15 @@ class JiraController extends CI_Controller {
 //		getCommentByID('LT-2','10010');
 //		updateComment('LT-2','10010','Comment update 2');
 //		delComment('LT-2','10010');
-
+//		setTransition('LT-3','DONE','Chuyển trạng thái');
+//	    searchAdvancedSQL('Project in (LT) and status in (Done)');
+//		getAllPriority();
+//		getPriority(1);
+//		createVersion('LT','1.0.0','Test');
+//		getVersionRelatedIssues('LT','1.0.0');
+//		getVersionUnrelatedIssues('LT','1.0.0');
+//		updateVersion('LT','1.0.0','1.0.1','Update test');
+		delVersion('LT','1.0.1');
 	}
 
 }

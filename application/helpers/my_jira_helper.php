@@ -6,6 +6,11 @@ use JiraRestApi\Issue\IssueField;
 use JiraRestApi\Issue\Worklog;
 use JiraRestApi\Issue\Transition;
 use JiraRestApi\Issue\Comment;
+use JiraRestApi\Priority\PriorityService;
+use JiraRestApi\Issue\Version;
+use JiraRestApi\Project\ProjectService;
+use JiraRestApi\Version\VersionService;
+
 // lấy ra 1 issue
 if ( ! function_exists('getIssue'))
 {
@@ -171,5 +176,105 @@ if (!function_exists('updateComment')) {
 		$comment->setBody($body);
 		$issueService->updateComment($issueKey, $id, $comment);
 		echo "Update comment success!";
+	}
+}
+
+// advanced search
+if (!function_exists('searchAdvancedSQL')) {
+	function searchAdvancedSQL($jql)
+	{
+		$issueService = new IssueService();
+		$ret = $issueService->search($jql);
+		var_dump($ret);
+	}
+}
+
+//priority
+if (!function_exists('getAllPriority')) {
+	function getAllPriority()
+	{
+		$ps = new PriorityService();
+		$p = $ps->getAll();
+		var_dump($p);
+	}
+}
+
+if (!function_exists('getPriority')) {
+	function getPriority($id)
+	{
+		$ps = new PriorityService();
+		$p = $ps->get($id);
+		var_dump($p);
+	}
+}
+
+//version
+if (!function_exists('createVersion')) {
+	function createVersion($proj,$ver,$desc)
+	{
+		$projectService = new ProjectService();
+		$project = $projectService->get($proj);
+		$versionService = new VersionService();
+		$version = new Version();
+		$version->setName($ver)
+			->setDescription($desc)
+			->setReleased(true)
+			->setStartDateAsDateTime(new \DateTime())
+			->setReleaseDateAsDateTime((new \DateTime())->add(date_interval_create_from_date_string('1 months 3 days')))
+			->setProjectId($project->id)
+		;
+		$res = $versionService->create($version);
+		var_dump($res);
+	}
+}
+
+if (!function_exists('updateVersion')) {
+	function updateVersion($proj,$ver,$updateVer,$desc)
+	{
+		$versionService = new VersionService();
+		$projectService = new ProjectService();
+		$ver = $projectService->getVersion($proj,$ver);
+		//update
+		$ver->setName($updateVer)
+			->setDescription($desc)
+			->setReleased(false)
+			->setStartDateAsDateTime(new \DateTime())
+			->setReleaseDateAsDateTime((new \DateTime())->add(date_interval_create_from_date_string('2 weeks 3 days')))
+		;
+		$res = $versionService->update($ver);
+		var_dump($res);
+	}
+}
+
+if (!function_exists('delVersion')) {
+	function delVersion($proj,$ver)
+	{
+		$versionService = new VersionService();
+		$projectService = new ProjectService();
+		$version = $projectService->getVersion($proj, $ver);
+		$res = $versionService->delete($version);
+		echo "Delete version success!!!";
+	}
+}
+//get version giải quyết đc issue
+if (!function_exists('getVersionRelatedIssues')) {
+	function getVersionRelatedIssues($proj,$ver)
+	{
+		$versionService = new VersionService();
+		$projectService = new ProjectService();
+		$version = $projectService->getVersion($proj, $ver);
+		$res = $versionService->getRelatedIssues($version);
+		var_dump($res);
+	}
+}
+//get version chưa giải quyết đc issue
+if (!function_exists('getVersionUnrelatedIssues')) {
+	function getVersionUnrelatedIssues($proj,$ver)
+	{
+		$versionService = new VersionService();
+		$projectService = new ProjectService();
+		$version = $projectService->getVersion($proj, $ver);
+		$res = $versionService->getUnresolvedIssues($version);
+		var_dump($res);
 	}
 }

@@ -10,6 +10,8 @@ use JiraRestApi\Priority\PriorityService;
 use JiraRestApi\Issue\Version;
 use JiraRestApi\Project\ProjectService;
 use JiraRestApi\Version\VersionService;
+use JiraRestApi\Component\ComponentService;
+use JiraRestApi\User\UserService;
 
 // lấy ra 1 issue
 if ( ! function_exists('getIssue'))
@@ -276,5 +278,25 @@ if (!function_exists('getVersionUnrelatedIssues')) {
 		$version = $projectService->getVersion($proj, $ver);
 		$res = $versionService->getUnresolvedIssues($version);
 		var_dump($res);
+	}
+}
+
+//change assignee
+if (!function_exists('changeProjectAssignee')) {
+	function changeProjectAssignee($issueKey,$accountId)
+	{
+		$issueService = new IssueService();
+		$ret = $issueService->changeAssigneeByAccountId($issueKey, $accountId);
+		echo "change assignee success";
+	}
+}
+
+//get user info
+if (!function_exists('getUserInfo')) {
+	function getUserInfo($accountId)
+	{
+		$us = new UserService();
+		$user = $us->get(['accountId' => $accountId]);
+		var_dump($user);
 	}
 }

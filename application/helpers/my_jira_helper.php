@@ -12,6 +12,10 @@ use JiraRestApi\Project\ProjectService;
 use JiraRestApi\Version\VersionService;
 use JiraRestApi\Component\ComponentService;
 use JiraRestApi\User\UserService;
+use JiraRestApi\Field\Field;
+use JiraRestApi\Field\FieldService;
+use JiraRestApi\IssueLink\IssueLink;
+use JiraRestApi\IssueLink\IssueLinkService;
 
 // lấy ra 1 issue
 if ( ! function_exists('getIssue'))
@@ -309,3 +313,43 @@ if (!function_exists('getUserInfo')) {
 		var_dump($user);
 	}
 }
+
+//field
+if (!function_exists('getAllFieldList')){
+	function getAllFieldList(){
+		$fieldService = new FieldService();
+		// return custom field only.
+		$ret = $fieldService->getAllFields(Field::CUSTOM);
+		var_dump($ret);
+	}
+}
+
+if (!function_exists('createField')){
+	function createField(){
+		$field = new Field();
+		$field->setName('Độ ưu tiên')
+			->setDescription('Mức độ ưu tiên của vấn đề')
+			->setType('com.atlassian.jira.plugin.system.customfieldtypes:textarea')
+			->setSearcherKey('com.atlassian.jira.plugin.system.customfieldtypes:textsearcher');
+		$fieldService = new FieldService();
+		$ret = $fieldService->create($field);
+		var_dump($ret);
+	}
+}
+// Link issue
+if (!function_exists('linkIssue')){
+	function linkIssue($issue1,$issue2,$linkType,$comment){
+		$il = new IssueLink();
+
+		$il->setInwardIssue($issue1)
+			->setOutwardIssue($issue2)
+			->setLinkTypeName($linkType)
+			->setComment($comment);
+
+		$ils = new IssueLinkService();
+
+		$ret = $ils->addIssueLink($il);
+		echo "link issue success!";
+	}
+}
+

@@ -31,7 +31,10 @@ class JiraController extends CI_Controller {
 //		delVersion('LT','1.0.1');
 //		getComponent('LT');
 //		changeProjectAssignee('LT-7','712020:11db78e0-5882-4547-acf1-9baf0250055e');
-		getUserInfo('712020:11db78e0-5882-4547-acf1-9baf0250055e');
+//		getUserInfo('712020:11db78e0-5882-4547-acf1-9baf0250055e');
+//		getAllFieldList();
+//		createField();
+		linkIssue('LT-3','LT-7','Relates','Test');
 	}
 
 }

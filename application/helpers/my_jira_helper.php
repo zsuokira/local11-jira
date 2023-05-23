@@ -16,6 +16,77 @@ use JiraRestApi\Field\Field;
 use JiraRestApi\Field\FieldService;
 use JiraRestApi\IssueLink\IssueLink;
 use JiraRestApi\IssueLink\IssueLinkService;
+use JiraRestApi\Project\Project;
+//project
+if ( ! function_exists('createProject'))
+{
+	function createProject()
+	{
+		$p = new Project();
+
+		$p->setKey('EX')
+			->setName('Example')
+			->setProjectTypeKey('business')
+			->setProjectTemplateKey('com.atlassian.jira-core-project-templates:jira-core-project-management')
+			->setDescription('Example Project description')
+			->setLeadName('Phan Hiếu')
+			->setUrl('https://local11-jira.atlassian.net/')
+			->setAssigneeType('PROJECT_LEAD')
+			->setAvatarId(10130)
+			->setIssueSecurityScheme(10000)
+			->setPermissionScheme(10100)
+			->setNotificationScheme(10100)
+			->setCategoryId(10100)
+		;
+
+		$proj = new ProjectService();
+
+		$pj = $proj->createProject($p);
+
+		// 'http://example.com/rest/api/2/project/10042'
+		var_dump($pj->self);
+		// 10042
+		var_dump($pj->id);
+	}
+}
+//sửa
+if ( ! function_exists('updateProject'))
+{
+	function updateProject()
+	{
+		try {
+			$p = new Project();
+
+			$p->setName('Updated Example')
+				->setProjectTypeKey('software')
+				->setDescription('Updated Example Project description')
+				->setLeadAccountId('712020:11db78e0-5882-4547-acf1-9baf0250055e')
+				->setUrl('http://atlassian.com')
+			;
+
+			$proj = new ProjectService();
+
+			$pj = $proj->updateProject($p,'TP');
+
+			var_dump($pj);
+		} catch (JiraRestApi\JiraException $e) {
+			print('Error Occured! ' . $e->getMessage());
+		}
+	}
+}
+//xoá
+if ( ! function_exists('delProject'))
+{
+	function delProject($projectKey)
+	{
+		$proj = new ProjectService();
+
+		$pj = $proj->deleteProject($projectKey);
+		echo "success";
+	}
+}
+
+
 
 // lấy ra 1 issue
 if ( ! function_exists('getIssue'))
@@ -24,8 +95,8 @@ if ( ! function_exists('getIssue'))
 	{
 		$issueService = new IssueService();
 		$issue = $issueService->get($issueKey);
-
-		return $issue->fields->summary;
+		echo '<pre>' , var_dump($issue) , '</pre>';
+//		return $issue->fields->summary;
 	}
 }
 //tạo 1 issue
@@ -353,3 +424,18 @@ if (!function_exists('linkIssue')){
 	}
 }
 
+if (!function_exists('getIssueLinkType')){
+	function getIssueLinkType(){
+		$ils = new IssueLinkService();
+		$ret = $ils->getIssueLinkTypes();
+		var_dump($ret);
+	}
+}
+
+//epic
+if (!function_exists('getEpicInfo')){
+	function getEpicInfo($id){
+		$epic_service = new JiraRestApi\Epic\EpicService(); //10017
+		$epic = $epic_service->getEpic($id);
+	}
+}

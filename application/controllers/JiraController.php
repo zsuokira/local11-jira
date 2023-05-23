@@ -10,8 +10,8 @@ class JiraController extends CI_Controller {
 
 	public function index()
 	{
-//		createJiraIssue("LT","test 3","Bug","Test 1234597810");
-//		echo getIssue('LT-1');
+//		createJiraIssue("LT","Login","Epic","Test 1234597810");
+//		echo getIssue('LT-8');
 //		deleteIssues('LT-5');
 //		createLogwork('LT-1','5h 30m');
 //		getLogwork('LT-1');
@@ -34,7 +34,12 @@ class JiraController extends CI_Controller {
 //		getUserInfo('712020:11db78e0-5882-4547-acf1-9baf0250055e');
 //		getAllFieldList();
 //		createField();
-		linkIssue('LT-3','LT-7','Relates','Test');
+//		linkIssue('LT-3','LT-7','Relates','Test');
+//		getIssueLinkType();
+//		getEpicInfo('10002');
+//		createProject();
+		updateProject();
+//		delProject('TP');
 	}
 
 }
